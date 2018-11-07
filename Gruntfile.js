@@ -68,7 +68,7 @@ module.exports = function (grunt) {
             }
         },
         copy: {
-            server: {
+            deploy: {
                 expand: true,
                 cwd: 'src/',
                 src: ['services/**/*.js', 'views/**', 'app.js', '!tests/**', '!public/**', '!**/*.ts'],
@@ -126,5 +126,5 @@ module.exports = function (grunt) {
     });
     // tasks
     grunt.registerTask('compile', ['ts:compile']);
-
+    grunt.registerTask('build', ['compile','copy:deploy']);
 };

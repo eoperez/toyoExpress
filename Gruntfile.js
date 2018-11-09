@@ -4,7 +4,6 @@ module.exports = function (grunt) {
         pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
     });
     
-    // BCLCCU-10: define core libs.
     var projectPKG = grunt.file.readJSON('package.json');
     var coreLibs = Object.keys(projectPKG.dependencies);
     
@@ -33,6 +32,7 @@ module.exports = function (grunt) {
                 options: {
                     verbose: true,
                     target: 'es5',
+                    lib: ["es5", "es6", "dom"],
                     module: 'commonjs',
                     sourceMap: false,
                     declaration: false,
@@ -51,36 +51,28 @@ module.exports = function (grunt) {
         },
         sass: {
             options: {
-                includePaths: ['src/public/vendor/foundation/scss']
+                loadPath: ['node_modules/foundation-sites/scss/foundation.scss']
             },
             dist: {
                 options: {
-                    outputStyle: 'compressed',
+                    style: 'compressed',
                     sourceMap: true,
                 },
                 files: [{
                     expand: true,
-                    cwd: 'src/public/',
+                    cwd: 'src/resources/',
                     src: ['**/*.scss'],
-                    dest: 'dist/public/',
+                    dest: 'dist/resources/',
                     ext: '.css'
                 }]
             }
         },
         copy: {
-            server: {
+            deploy: {
                 expand: true,
                 cwd: 'src/',
                 src: ['services/**/*.js', 'views/**', 'app.js', '!tests/**', '!public/**', '!**/*.ts'],
                 dest: 'dist/'
-            }
-        },
-        env: {
-            options: {
-                NODE_CONFIG_DIR: './target/config'
-            },
-            dev: {
-                NODE_ENV: 'development',
             }
         },
         clean: {
@@ -90,17 +82,11 @@ module.exports = function (grunt) {
             testsSrc: {
                 src: ['src/tests/**/**.js', 'src/public/**/*-specs.js', 'src/public/**/*-specs.js.map']
             },
-            serverSrc: {
-                src: ['src/routes/**/**.js', 'src/models/**/**.js', 'src/*.js', 'src/bin/**.js', 'src/helpers/**/*.js', 'src/services/**/*.js']
+            source: {
+                src: ['src/views/**/**.js', 'src/models/**/**.js', 'src/*.js','src/services/**/*.js']
             },
-            clientAppsSrc: {
-                src: ['src/public/apps/**/**.js', 'src/public/apps/**/**.js.map', 'src/public/components/**/**.js', 'src/public/components/**/**.js.map', 'src/public/model/**/*.js', 'src/public/model/**/*.js.map']
-            },
-            targetClients: {
-                src: ['target/public/**']
-            },
-            target: {
-                src: ['target/**', '.tscache/**']
+            dist: {
+                src: ['dist/**', '.tscache/**']
             },
             globalStyles: {
                 src: ['src/public/style/**.css', 'src/public/style/**.css.map']
@@ -126,5 +112,7 @@ module.exports = function (grunt) {
     });
     // tasks
     grunt.registerTask('compile', ['ts:compile']);
-
+    grunt.registerTask('cleanSrc', ['clean:source']);
+    grunt.registerTask('buildStyles', ['sass']);
+    grunt.registerTask('build', ['buildStyles','compile','copy:deploy', 'cleanSrc']);
 };

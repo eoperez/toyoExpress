@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/eoperez/toyoExpress#readme",
   "devDependencies": {
+    "@types/knex": "^0.15.0",
     "bower": "1.8.4",
     "electron-rebuild": "^1.8.2",
     "grunt": "1.0.3",

@@ -32,6 +32,7 @@ module.exports = function (grunt) {
                 options: {
                     verbose: true,
                     target: 'es5',
+                    lib: ["es5", "es6", "dom"],
                     module: 'commonjs',
                     sourceMap: false,
                     declaration: false,

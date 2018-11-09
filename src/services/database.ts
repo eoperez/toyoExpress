@@ -54,16 +54,3 @@ export class Data implements iData{
         return null;
     };
 };
-// module.exports = Data;
-/*
-export module Data {
-    export const dbLocation: string = 'data/dms.db';
-    export var orm: db = db({
-        client: 'sqlite3',
-        connection: {
-            filename: dbLocation
-        },
-        useNullAsDefault: true
-    });
-}
-*/

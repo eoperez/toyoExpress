@@ -1,7 +1,7 @@
 import * as db from 'knex';
 import * as sqlite3 from 'sqlite3';
 
-export interface iData {
+export interface IData {
     dbLocation: string;
     orm: db;
     setOrm(dbLocation: string): void;
@@ -10,15 +10,15 @@ export interface iData {
     createDmsDB(dbLocation: string): void;
 }
 
-export class Data implements iData{
+export class Data implements IData {
     dbLocation: string;
     orm: db;
 
-    constructor(dbLocation: string){
+    constructor(dbLocation: string) {
         this.setOrm(dbLocation);
-    };
+    }
 
-    public setOrm(dbLocation : string) {
+    public setOrm(dbLocation: string) {
         this.orm = db({
             client: 'sqlite3',
             connection: {
@@ -26,27 +26,26 @@ export class Data implements iData{
             },
             useNullAsDefault: true
         });
-    };
-    
+    }
+
     public getOrm(): db{
         return this.orm;
-    };
-    
-    public getDbLocation() : string {
-        return this.dbLocation
-    };
+    }
+
+    public getDbLocation(): string {
+        return this.dbLocation;
+    }
 
     public createDmsDB(dbLocation): void {
-        console.log('Creating SQLite3 Db, in location: '+ dbLocation);
-        //do your thing });
-        let dbFile = new sqlite3.Database(dbLocation, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => { 
+        console.log('Creating SQLite3 Db, in location: ' + dbLocation);
+        const dbFile = new sqlite3.Database(dbLocation, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
             if (err) {
                 throw new Error(err.message);
             }
             console.log('Database file Created');
         });
         dbFile.close((err) => {
-            if(err){
+            if (err) {
                 throw new Error(err.message);
             }
             console.log('Connection Closed');

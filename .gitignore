@@ -1,32 +1,39 @@
-# Logs and databases #
-######################
-*.log
-*.sql
-*.sqlite
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Compiled source #
-###################
-.grunt
-node_modules
-dist
-.vagrant
-!tests
-tests/*
-!src/tests
-vendor
+# compiled output
+/dist
+/tmp
+/out-tsc
 
+# dependencies
+/node_modules
 
-# IDE Files       #
-###################
-.tscache
-.vscode
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# OS generated files #
-######################
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db

@@ -8,6 +8,7 @@ export interface IData {
     getOrm(): db;
     getDbLocation(): string;
     createDmsDB(dbLocation: string): void;
+    updateSchema(): void;
 }
 
 export class Data implements IData {
@@ -28,7 +29,7 @@ export class Data implements IData {
         });
     }
 
-    public getOrm(): db{
+    public getOrm(): db {
         return this.orm;
     }
 
@@ -38,6 +39,7 @@ export class Data implements IData {
 
     public createDmsDB(dbLocation): void {
         console.log('Creating SQLite3 Db, in location: ' + dbLocation);
+        // tslint:disable-next-line:no-bitwise
         const dbFile = new sqlite3.Database(dbLocation, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
             if (err) {
                 throw new Error(err.message);
@@ -51,5 +53,11 @@ export class Data implements IData {
             console.log('Connection Closed');
         });
         return null;
-    };
-};
+    }
+
+    public updateSchema(): void {
+        this.orm.migrate.latest({directory: './dist/migrations'}).catch((error) => {
+            throw new error('Issues with Db migration\'s scripts');
+        });
+    }
+}

@@ -13,13 +13,15 @@ const data  = new Data(dbLocation);
 
 fs.stat(dbLocation, (error) => {
     if (error) {
-        console.log('Database file not found in: '+ dbLocation +', creating database');
+        console.log('Database file not found in: ' + dbLocation + ', creating database');
         // does not extis do something to create the db file
         fs.mkdirSync(dataDir);
         data.createDmsDB(dbLocation);
+        data.updateSchema();
     } else {
         console.log('Database data base found in' + dbLocation);
         // files does exisits
+        data.updateSchema();
     }
 });
 

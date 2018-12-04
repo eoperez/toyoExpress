@@ -46,6 +46,8 @@
     "foundation-sites": "^6.5.0",
     "jquery": "^3.3.1",
     "knex": "^0.15.2",
+    "ngx-cookie-service": "^2.0.0",
+    "ngx-electron": "^2.0.0",
     "rxjs": "~6.3.3",
     "sqlite3": "^4.0.4",
     "what-input": "^5.1.3",

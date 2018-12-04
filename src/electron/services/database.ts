@@ -1,5 +1,6 @@
 import * as db from 'knex';
 import * as sqlite3 from 'sqlite3';
+import { from } from 'rxjs';
 
 export interface IData {
     dbLocation: string;
@@ -59,5 +60,36 @@ export class Data implements IData {
         this.orm.migrate.latest({directory: './dist/migrations'}).catch((error) => {
             throw new error('Issues with Db migration\'s scripts');
         });
+    }
+
+    public getSettings(): any {
+        return this.orm('settings').select().then((results) => {
+            return results[0];
+        });
+    }
+    public getUser(userName): any {
+        return this.orm.select(
+            'u.id',
+            'u.userId',
+            'u.email',
+            'u.fName',
+            'u.lName',
+            'u.pass',
+            'u.lastLogin',
+            'p.roles_id')
+            .from('users AS u')
+            .innerJoin('permissions AS p', 'p.users_id', 'u.id' )
+            .where('u.userId', '=', userName)
+            .then((results) => {
+                let userWithRoles: any = {};
+                const userRoles: Array<Number> = [];
+                results.forEach(userObject => {
+                    userWithRoles = userObject;
+                    userRoles.push(userObject.roles_id);
+                });
+                userWithRoles.roles_id = userRoles;
+                console.log(userWithRoles);
+                return userWithRoles;
+            });
     }
 }

@@ -1,0 +1,27 @@
+<div class="grid-x">
+    <div class="cell large-auto"></div>
+    <div class="cell large-auto">
+        <div class="callout alert-callout-border alert radius" *ngIf="loginError">
+            <h5><strong>Authentication Failed</strong></h5>
+            <p>Combination of username and/or password is incorrect.</p>
+        </div>
+        <form #signIn="ngForm" (ngSubmit)="onSignInSubmit(signIn)">
+            <div class="sign-in-form">
+              <h4 class="text-center">Sign In</h4>
+              <label for="sign-in-form-username">Username</label>
+              <div data-alert class="callout alert-callout-border alert radius small" *ngIf="userControl.errors && (userControl.dirty || userControl.touched)">
+                 <small> Username is required</small>
+                </div>
+              <input type="text" class="sign-in-form-username" id="sign-in-form-username" name="user" #userControl="ngModel" [(ngModel)]="user" required />
+              <label for="sign-in-form-password">Password</label>
+              <div data-alert class="callout alert-callout-border alert radius small" *ngIf="pwdControl.errors && (pwdControl.dirty || pwdControl.touched)">
+                  <small> Password is required </small>
+              </div>
+              <input type="password" class="sign-in-form-password" id="sign-in-form-password" name="pwd" #pwdControl="ngModel" [(ngModel)]="pwd" required />
+              <button type="submit" class="sign-in-form-button" [disabled]="signIn.invalid">Sign In</button>
+            </div>
+          </form>
+    </div>
+    <div class="cell large-auto"></div>
+  </div>
+

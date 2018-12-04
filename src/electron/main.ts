@@ -1,14 +1,15 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session, ipcMain, IpcMessageEvent } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import {Data} from './services/database';
+import { userInfo } from 'os';
+
 
 let mainWindow: Electron.BrowserWindow;
 // TODO: This should be moved to a properties file
 const dataDir = './data';
 const dbfileName = 'dms.db';
 const dbLocation: string = dataDir + '/' + dbfileName;
-
 const data  = new Data(dbLocation);
 
 fs.stat(dbLocation, (error) => {
@@ -26,6 +27,24 @@ fs.stat(dbLocation, (error) => {
 });
 
 function createWindow() {
+  const activeSession = session.defaultSession;
+  data.getSettings().then((results) => {
+    for (const key in results) {
+      if (results.hasOwnProperty(key)) {
+        console.log('creating cookie: ' + key + ' with value: ' + results[key]);
+        activeSession.cookies.set({url: '*', name: key, value: results[key]}, (cookieError) => {
+          if (cookieError) {
+            throw new Error('Error setting the cookies' + cookieError);
+          }
+        });
+      }
+    }
+  });
+  activeSession.cookies.set({url: '*', name: 'hasSession', value: 'false'}, (cookieError) => {
+    if (cookieError) {
+      throw new Error('Error setting default user session: ' + cookieError);
+    }
+  });
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1024,
@@ -69,5 +88,31 @@ app.on('activate', () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// listeners.
+
+ipcMain.on('signIn', (event: IpcMessageEvent, credentials) => {
+  // TODO: DB service should check for users within credentials
+  // in case of match should update session Cookie and send back signed true otherwise false.
+  console.log('User: ' + credentials.user + ' is making a sign in attempt.');
+  data.getUser(credentials.user).then((user) => {
+    let isSigned: boolean;
+    if (credentials.pwd === user.pass) {
+      const activeSession = session.defaultSession;
+      console.log('Main process is getting user: ', user);
+      isSigned = true;
+      user.hasSession = true;
+      for (const attribute in user) {
+        if (user.hasOwnProperty(attribute)) {
+          activeSession.cookies.set({url: '*', name: attribute, value: user[attribute]}, (cookieError) => {
+            if (cookieError) {
+              throw new Error('Error setting the cookies' + cookieError);
+            }
+          });
+        }
+      }
+    } else {
+      isSigned = false;
+    }
+    event.sender.send('signedIn', isSigned);
+  });
+});

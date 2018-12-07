@@ -1,0 +1,21 @@
+<h2>Categories</h2>
+<p><a data-open="exampleModal1" class="secondary button"> <i class="fi-plus"></i> Add Category</a></p>
+
+<div class="reveal" id="exampleModal1" data-animation-in="fade-in" data-animation-out="fade-out" data-reveal>
+  <h3> <i class="fi-plus icon-bg"></i> Add Category</h3>
+  <form>
+    <label>Category Name:
+      <div data-alert class="callout alert-callout-border alert small" *ngIf="nameControl.errors && (nameControl.dirty || nameControl.touched)">
+            <small>Category name is required</small>
+      </div>
+      <input placeholder="Type a name" type="text" name="user" #nameControl="ngModel" [(ngModel)]="name" required autofocus />
+    </label>
+    <label>Description:
+      <textarea placeholder="(Optional) Description text" name="description" rows="6"></textarea>
+    </label>
+    <button type="button" class="expanded button">Save</button>
+  </form>
+  <button class="close-button" data-close aria-label="Close reveal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>

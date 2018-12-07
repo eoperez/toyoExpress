@@ -12,7 +12,7 @@
               <div data-alert class="callout alert-callout-border alert radius small" *ngIf="userControl.errors && (userControl.dirty || userControl.touched)">
                  <small> Username is required</small>
                 </div>
-              <input type="text" class="sign-in-form-username" id="sign-in-form-username" name="user" #userControl="ngModel" [(ngModel)]="user" required />
+              <input type="text" class="sign-in-form-username" id="sign-in-form-username" name="user" #userControl="ngModel" [(ngModel)]="user" required autofocus/>
               <label for="sign-in-form-password">Password</label>
               <div data-alert class="callout alert-callout-border alert radius small" *ngIf="pwdControl.errors && (pwdControl.dirty || pwdControl.touched)">
                   <small> Password is required </small>

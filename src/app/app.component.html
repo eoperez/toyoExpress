@@ -11,6 +11,9 @@
     </div>
     <div class="cell large-auto body-info">
       <app-login (changeHasSession)='setHasSession($event)' *ngIf="!hasSession"></app-login>
+      <div class="content-area">
+        <router-outlet></router-outlet>
+      </div>
     </div>
     <div class="cell large-auto">
       <div class="cell large-auto footer">

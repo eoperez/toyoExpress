@@ -1,8 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/foundation-sites/scss/foundation.scss';
-
 @include foundation-everything;
 
+// Motion-ui
+@import '../node_modules/motion-ui/motion-ui';
+@include motion-ui-transitions;
+@include motion-ui-animations;
+
+// Font Icons
+$font-path: './assets/foundation-icons/foundation-icons';
+@font-face {
+  font-family: "foundation-icons";
+  src: url("#{$font-path}.eot");
+  src: url("#{$font-path}.eot?#iefix") format("embedded-opentype"),
+       url("#{$font-path}.woff") format("woff"),
+       url("#{$font-path}.ttf") format("truetype"),
+       url("#{$font-path}.svg#fontcustom") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  color: #DBD4D3;
+}
+@import './assets/foundation-icons/foundation-icons.css';
+
+// For the APP
 $nav-text-color: #f7f7f7;
 $nav-height: 75px;
 $nav-background: #2c3840;
@@ -10,10 +30,55 @@ $offcanvas-padding: 20px;
 $alert-callout-border-left-width: rem-calc(5);
 $alert-callout-border-padding: 1.3rem;
 $alert-callout-border-radius: 0.6rem;
+$theme-yellow-color: #F9DC5C;
+$theme-aqua-color: #45F0DF;
+$theme-default-color: #596D78;
+$theme-darkBlue-color: #313E50;
 
+.reveal {
+  h3 {
+    background-color: rgb(89, 109, 123);
+    margin-top: -1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+    color: #f7f7f7;
+  }
+  .close-button {
+    color: #fff;
+  }
+}
+
+.icon-bg {
+  background-color: $theme-yellow-color;
+  border-color: $theme-darkBlue-color;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: .5rem;
+  padding-bottom: .2rem;
+  padding-top: .2rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  margin-right: 1rem;
+}
+.fade-in {
+  // A long, long fade
+  @include mui-fade(in, $duration: .2s);
+}
+.fade-out {
+  // A long, long fade
+  @include mui-fade(out, $duration: .2s);
+}
+
+.content-area {
+  margin-left: .5rem;
+  margin-right: .5rem;
+  margin-top: -4rem;
+}
 .alert-callout-border {
   width: 100%;
   padding: $alert-callout-border-padding;
+  margin-bottom: .5rem;
   border-left-width: $alert-callout-border-left-width;
   border-left-color: $medium-gray;
 
@@ -74,7 +139,6 @@ $alert-callout-border-radius: 0.6rem;
     }
   }
 }
-
 .footer {
   color: #f7f7f7;
   background: rgba($nav-background, 0.5);   

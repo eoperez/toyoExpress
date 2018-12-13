@@ -1,21 +1,54 @@
-<h2>Categories</h2>
-<p><a data-open="exampleModal1" class="secondary button"> <i class="fi-plus"></i> Add Category</a></p>
+<h2 id="category">Categories</h2>
+<div class="help-text" id="category">Categories are used to organize your inventory. You could use a category to group
+  items and it will become handy for reporting.</div>
+<div class="button-group secondary expanded">
+  <a data-open="save" class="button"> <i class="fi-plus icon-accent"></i> Add Category</a>
+  <a (click)="deleteConfirmation()" class="button"><i class="fi-trash icon-accent"></i> Delete Selected</a>
+</div>
 
-<div class="reveal" id="exampleModal1" data-animation-in="fade-in" data-animation-out="fade-out" data-reveal>
-  <h3> <i class="fi-plus icon-bg"></i> Add Category</h3>
-  <form>
+<app-datatable [dataSet]="dataSet" [columnsDef]="columnsDef" [columnsToDisplay]="columnsToDisplay" (emitEdit)="edit($event)"
+  (emitDelete)="deleteConfirmation($event)"></app-datatable>
+
+<div [hidden]="!resultMessage.show" class="callout small" [ngClass]="resultMessage.type" data-animate="fade-in fade-out" id="resultsCallout">
+  <strong style="color: #1c763d"><i class="fi-check"></i> {{ resultMessage.type | titlecase }}:</strong><small> {{ resultMessage.text }}</small>
+</div>
+
+<div class="reveal" id="save" data-animation-in="fade-in" data-animation-out="fade-out" data-reveal>
+  <h3> <i class="icon-accent" [ngClass] = "{'fi-plus': (action=='Insert'),  'fi-pencil': (action=='Edit')}"></i> {{action}} Category</h3>
+  <form #categoryForm="ngForm">
     <label>Category Name:
       <div data-alert class="callout alert-callout-border alert small" *ngIf="nameControl.errors && (nameControl.dirty || nameControl.touched)">
-            <small>Category name is required</small>
+        <small>Category name is required</small>
       </div>
-      <input placeholder="Type a name" type="text" name="user" #nameControl="ngModel" [(ngModel)]="name" required autofocus />
+      <input placeholder="Type a name" type="text" name="category.user" #nameControl="ngModel" [(ngModel)]="category.name" required
+        autofocus />
     </label>
     <label>Description:
-      <textarea placeholder="(Optional) Description text" name="description" rows="6"></textarea>
+      <textarea placeholder="(Optional) Description text" name="category.description" [(ngModel)]="category.description" rows="6"></textarea>
     </label>
-    <button type="button" class="expanded button">Save</button>
+    <button (click)="save()" type="button" class="secondary expanded button">Save</button>
   </form>
   <button class="close-button" data-close aria-label="Close reveal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="reveal" id="confirmDelete" data-animation-in="fade-in" data-animation-out="fade-out" data-reveal>
+  <h3> <i class="fi-trash alert icon-accent delete"></i> Delete</h3>
+  <div class="lead">
+    <br>
+      <h5 *ngIf="(itemsDelete.length === 1)" >Are you sure you want to delete: <strong>{{itemsDelete[0].name}} </strong>?</h5>
+      <h5 *ngIf="(itemsDelete.length > 1)">Are you sure you want to delete: <strong>{{itemsDelete.length}} records</strong> ?</h5>
+      <div *ngIf="(itemsDelete.length <= 0)" class="callout alert" >
+        <p>Nothing is marked for deletion, please select at least one item.</p>
+      </div>
+    <br>
+  </div>
+  <div *ngIf="(itemsDelete.length != 0)" class="expanded button-group lead">
+    <a class="button secondary" data-close aria-label="Close">Cancel</a>
+    <a class="button alert " (click)="delete()">Delete</a>
+  </div>
+  <button class="close-button" data-close aria-label="Close" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>

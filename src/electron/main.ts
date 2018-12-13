@@ -91,8 +91,6 @@ app.on('activate', () => {
 // listeners.
 
 ipcMain.on('signIn', (event: IpcMessageEvent, credentials) => {
-  // TODO: DB service should check for users within credentials
-  // in case of match should update session Cookie and send back signed true otherwise false.
   console.log('User: ' + credentials.user + ' is making a sign in attempt.');
   data.getUser(credentials.user).then((user) => {
     let isSigned: boolean;
@@ -115,4 +113,57 @@ ipcMain.on('signIn', (event: IpcMessageEvent, credentials) => {
     }
     event.sender.send('signedIn', isSigned);
   });
+});
+ipcMain.on('category', (event: IpcMessageEvent, payload) => {
+  let message = '';
+  switch (payload.action) {
+    case 'insert':
+      console.log('mainProcess:category:insert:paylod:', payload.record);
+      data.insertCategory(payload.record).then((results) => {
+        if (results.length > 0) {
+          message = 'Category record saved with id: ' + results[0];
+        } else {
+          message = 'Error creating new category: ' + results;
+        }
+        event.returnValue = {action: payload.action, message: message};
+      });
+      break;
+    case 'edit':
+      console.log('mainProcess:category:edit:paylod:', payload.record);
+      payload.record.updated_at = Date.now();
+      data.updateCategory(payload.record).then((results) => {
+        if (results > 0) {
+          message = 'Category record saved';
+        } else {
+          message = 'Error editing a category: ' + results;
+        }
+        event.returnValue = {action: payload.action, message: message};
+      });
+      break;
+    case 'delete':
+      console.log('mainProcess:category:delete:paylod:', payload);
+      data.deleteCategories(payload.record).then((results) => {
+        console.log('mainProcess:category:delete:result:', results);
+        if (results === 1) {
+          message = 'Category record deleted';
+        } else if (results > 1) {
+          message = 'Category records deleted: '  + results;
+        } else {
+          message = 'Error editing a category: ' + results;
+        }
+        event.returnValue = {action: payload.action, message: message};
+      });
+      break;
+    case 'get':
+      console.log('mainProcess:category:get:paylod:', payload);
+      data.getCategories().then((results) => {
+        event.sender.send('categoryMainDone', {action: payload.action, message: results});
+      });
+      break;
+    default:
+      console.log('mainProcess:category:default:', payload);
+      message = 'error';
+      throw new Error('Invalida action');
+      break;
+  }
 });

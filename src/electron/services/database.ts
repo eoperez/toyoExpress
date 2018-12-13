@@ -92,4 +92,31 @@ export class Data implements IData {
                 return userWithRoles;
             });
     }
+    public insertCategory(category) {
+        delete category.id;
+        category.created_at = Date.now();
+        category.updated_at = Date.now();
+        return this.orm('categories').insert(category).then((results) => {
+            console.log('service:database:insertCategory:results:', results);
+            return results;
+        });
+    }
+    public getCategories() {
+        return this.orm.select().from('categories').then((results) => {
+            console.log('service:database:getCategories:results.length:', results.length);
+            return results;
+        });
+    }
+    public updateCategory(category) {
+        return this.orm('categories').where('id', '=', category.id).update(category).then((results) => {
+            console.log('service:database:updateCategories:results:', results);
+            return results;
+        });
+    }
+    public deleteCategories(listCategory) {
+        return this.orm('categories').whereIn('id', listCategory).del().then((results) => {
+            console.log('service:database:deleteCategories:results:', results);
+            return results;
+        });
+    }
 }

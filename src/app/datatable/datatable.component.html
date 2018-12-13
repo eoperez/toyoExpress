@@ -1,0 +1,40 @@
+<mat-form-field>
+  <input matInput (keyup)="search($event.target.value)" placeholder="Search">
+</mat-form-field>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 datatable">
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef style="padding-top: .6rem;">
+        <input id="header" type="checkbox"
+          (change)="$event ? masterToggle() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"> 
+    </th>
+    <td mat-cell *matCellDef="let rowSelected" style="padding-top: .6rem;">
+      <input id="{{rowSelected.id}}" type="checkbox"
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selection.toggle(rowSelected) : null"
+        [checked]="selection.isSelected(rowSelected)">
+    </td>
+  </ng-container>
+  <!-- Data Columns -->
+  <ng-container [matColumnDef]="column.id" *ngFor="let column of columnsDef">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column.name}} </th>
+    <td mat-cell *matCellDef="let element"> {{element[column.id]}} </td>
+  </ng-container>
+  <!-- Actions Columns -->
+  <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let action">
+        <div class="button-group actions">
+            <a class="clear button secondary actions" (click)='sendEdit(action)'><i class="fi-pencil"></i></a>
+            <a class="clear button alert actions" (click)='sendDelete(action)'><i class="fi-trash"></i></a>
+        </div>
+      </td>
+    </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" (click)="selection.toggle(row)"></tr>
+
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>

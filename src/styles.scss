@@ -7,6 +7,9 @@
 @include motion-ui-transitions;
 @include motion-ui-animations;
 
+//Angular Matetial Themes
+@import "./theme";
+
 // Font Icons
 $font-path: './assets/foundation-icons/foundation-icons';
 @font-face {
@@ -48,18 +51,15 @@ $theme-darkBlue-color: #313E50;
     color: #fff;
   }
 }
-
-.icon-bg {
-  background-color: $theme-yellow-color;
-  border-color: $theme-darkBlue-color;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: .5rem;
+.icon-accent {
+  color: $theme-yellow-color;
   padding-bottom: .2rem;
   padding-top: .2rem;
   padding-left: .5rem;
   padding-right: .5rem;
-  margin-right: 1rem;
+  .delete {
+    color: $alert-color;
+  }
 }
 .fade-in {
   // A long, long fade
@@ -252,7 +252,7 @@ $theme-darkBlue-color: #313E50;
   color: $nav-background;
 
   .button {
-    margin: 1rem 0;
+    margin: 1rem 1px;
     padding: 0.85em 2em;
   }
 }

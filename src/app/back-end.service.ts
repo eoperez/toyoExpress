@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
 export interface ISettings {
@@ -25,7 +25,7 @@ export class BackEndService {
   settings: any = {};
   hasSession = false;
   error: Error;
-  constructor(private _electronService: ElectronService) { }
+  constructor(private _electronService: ElectronService, private _ngZone: NgZone) { }
 
   getSettings( callback: (error: Error, settings: ISettings) => void ) {
     console.log('getting cookies from backend');
@@ -62,6 +62,26 @@ export class BackEndService {
     });
     } catch (error) {
       callback(error, false);
+    }
+  }
+  categorySync (payload) {
+    try {
+      const results = this._electronService.ipcRenderer.sendSync('category', payload);
+      console.log('BackendService:categorySync:' + payload.action , results);
+      return results;
+    } catch (error) {
+      return error;
+    }
+  }
+  category( payload, callback: (error: Error, succeed: any) => void) {
+    try {
+      this._electronService.ipcRenderer.send('category', payload);
+      this._electronService.ipcRenderer.on('categoryMainDone', (event, result) => {
+        console.log('BackendService:category:' + result.action + ': ', result);
+        callback(this.error, result);
+      });
+    } catch (error) {
+      callback(error, null);
     }
   }
 }

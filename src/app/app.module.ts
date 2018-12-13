@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgxElectronModule } from 'ngx-electron';
 import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -13,6 +14,10 @@ import { CategoriesComponent } from './categories/categories.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { UsersComponent } from './users/users.component';
 import { SystemComponent } from './system/system.component';
+import { DatatableComponent } from './datatable/datatable.component';
+import {
+  MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSortModule,
+  MatFormFieldModule, MatInputModule,  } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -24,13 +29,21 @@ import { SystemComponent } from './system/system.component';
     CategoriesComponent,
     InventoryComponent,
     UsersComponent,
-    SystemComponent
+    SystemComponent,
+    DatatableComponent
   ],
   imports: [
     BrowserModule,
     NgxElectronModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCheckboxModule,
+    BrowserAnimationsModule
   ],
   providers: [
   ],
